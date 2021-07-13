@@ -1,14 +1,11 @@
 package com.onedeveloper.gbtw_reminder;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainActivity extends AppCompatActivity {
@@ -21,7 +18,8 @@ public class MainActivity extends AppCompatActivity {
         init();
     }
 
-    private void init(){
+    private void init() {
+        /*
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(task -> {
                     if (!task.isSuccessful()) {
@@ -35,12 +33,33 @@ public class MainActivity extends AppCompatActivity {
                     // Log and toast
                     Log.d("GBTWLOG", "Application Token: " + token);
                 });
+        */
+        unsubscribeTopic("notice");
+        subscribeTopic("update");
+        subscribeTopic("event");
+        unsubscribeTopic("endEvent");
+        unsubscribeTopic("eventWinner");
+        subscribeTopic("youtube");
+    }
 
-        FirebaseMessaging.getInstance().subscribeToTopic("GBTF")
+    public void subscribeTopic(String topic) {
+        FirebaseMessaging.getInstance().subscribeToTopic(topic)
                 .addOnCompleteListener(task -> {
-                    String msg = "Subscribe Result: success";
+                    String msg = topic + " subscribe Result: success";
                     if (!task.isSuccessful()) {
-                        msg = "Subscribe Result: fail";
+                        msg = topic + " subscribe Result: fail";
+                    }
+                    Log.d("GBTWLOG", msg);
+                    Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    public void unsubscribeTopic(String topic){
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(topic)
+                .addOnCompleteListener(task -> {
+                    String msg = topic + " unsubscribe Result: success";
+                    if (!task.isSuccessful()) {
+                        msg = topic + " unsubscribe Result: fail";
                     }
                     Log.d("GBTWLOG", msg);
                     Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
