@@ -1,0 +1,2 @@
+rootProject.name = "GBTW-Reminder"
+include ':app'
