@@ -10,4 +10,7 @@
     <string name="switch_pushsetting_eventwinner">이벤트 당첨자</string>
     <string name="switch_pushsetting_youtube">유튜브</string>
 
+    <!-- Etc -->
+    <string name="this_is_trial_version">현재 무료 버전을 이용중입니다</string>
+
 </resources>
