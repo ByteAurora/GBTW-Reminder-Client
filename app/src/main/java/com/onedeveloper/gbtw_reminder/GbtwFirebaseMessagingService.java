@@ -8,11 +8,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -75,5 +77,27 @@ public class GbtwFirebaseMessagingService extends FirebaseMessagingService {
     public void onNewToken(@NonNull String s) {
         super.onNewToken(s);
         Log.d("GBTWLOG", "Create New Token: Success");
+    }
+
+    public static void subscribeTopic(String topic) {
+        FirebaseMessaging.getInstance().subscribeToTopic(topic)
+                .addOnCompleteListener(task -> {
+                    String msg = topic + " subscribe Result: success";
+                    if (!task.isSuccessful()) {
+                        msg = topic + " subscribe Result: fail";
+                    }
+                    Log.d("GBTWLOG", msg);
+                });
+    }
+
+    public static void unSubscribeTopic(String topic){
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(topic)
+                .addOnCompleteListener(task -> {
+                    String msg = topic + " unsubscribe Result: success";
+                    if (!task.isSuccessful()) {
+                        msg = topic + " unsubscribe Result: fail";
+                    }
+                    Log.d("GBTWLOG", msg);
+                });
     }
 }

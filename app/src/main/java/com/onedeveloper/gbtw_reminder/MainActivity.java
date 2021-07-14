@@ -1,5 +1,6 @@
 package com.onedeveloper.gbtw_reminder;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -16,6 +17,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         init();
+
+        Intent intent = new Intent(MainActivity.this, PushSettingActivity.class);
+        startActivity(intent);
     }
 
     private void init() {
@@ -34,35 +38,28 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("GBTWLOG", "Application Token: " + token);
                 });
         */
-        unsubscribeTopic("notice");
-        subscribeTopic("update");
-        subscribeTopic("event");
-        unsubscribeTopic("endEvent");
-        unsubscribeTopic("eventWinner");
-        subscribeTopic("youtube");
+        SharedPreferenceManager.open(MainActivity.this, Constants.SP_NAME);
+
+        if(SharedPreferenceManager.load(Constants.SP_KEY_INIT, false) == false){
+            SharedPreferenceManager.save(Constants.SP_KEY_PUSHSETTING_NOTICE, true);
+            SharedPreferenceManager.save(Constants.SP_KEY_PUSHSETTING_NOTICECOUPON, true);
+            SharedPreferenceManager.save(Constants.SP_KEY_PUSHSETTING_UPDATE, true);
+            SharedPreferenceManager.save(Constants.SP_KEY_PUSHSETTING_EVENT, true);
+            SharedPreferenceManager.save(Constants.SP_KEY_PUSHSETTING_ENDEVENT, true);
+            SharedPreferenceManager.save(Constants.SP_KEY_PUSHSETTING_EVENTWINNER, true);
+            SharedPreferenceManager.save(Constants.SP_KEY_PUSHSETTING_YOUTUBE, true);
+
+            GbtwFirebaseMessagingService.subscribeTopic(Constants.FIREBASE_TOPIC_NOTICE);
+            GbtwFirebaseMessagingService.subscribeTopic(Constants.FIREBASE_TOPIC_NOTICECOUPON);
+            GbtwFirebaseMessagingService.subscribeTopic(Constants.FIREBASE_TOPIC_UPDATE);
+            GbtwFirebaseMessagingService.subscribeTopic(Constants.FIREBASE_TOPIC_EVENT);
+            GbtwFirebaseMessagingService.subscribeTopic(Constants.FIREBASE_TOPIC_ENDEVENT);
+            GbtwFirebaseMessagingService.subscribeTopic(Constants.FIREBASE_TOPIC_EVENTWINNER);
+            GbtwFirebaseMessagingService.subscribeTopic(Constants.FIREBASE_TOPIC_YOUTUBE);
+
+            SharedPreferenceManager.save(Constants.SP_KEY_INIT, true);
+        }
     }
 
-    public void subscribeTopic(String topic) {
-        FirebaseMessaging.getInstance().subscribeToTopic(topic)
-                .addOnCompleteListener(task -> {
-                    String msg = topic + " subscribe Result: success";
-                    if (!task.isSuccessful()) {
-                        msg = topic + " subscribe Result: fail";
-                    }
-                    Log.d("GBTWLOG", msg);
-                    Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
-                });
-    }
 
-    public void unsubscribeTopic(String topic){
-        FirebaseMessaging.getInstance().unsubscribeFromTopic(topic)
-                .addOnCompleteListener(task -> {
-                    String msg = topic + " unsubscribe Result: success";
-                    if (!task.isSuccessful()) {
-                        msg = topic + " unsubscribe Result: fail";
-                    }
-                    Log.d("GBTWLOG", msg);
-                    Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
-                });
-    }
 }

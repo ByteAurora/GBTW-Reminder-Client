@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">건쉽배틀 : 토탈워페어 알리미</string>
+
+    <!-- Push Alarm Name -->
+    <string name="switch_pushsetting_notice">공지사항</string>
+    <string name="switch_pushsetting_noticecoupon">쿠폰</string>
+    <string name="switch_pushsetting_update">업데이트, 점검</string>
+    <string name="switch_pushsetting_event">새로운 이벤트</string>
+    <string name="switch_pushsetting_endevent">이벤트 종료</string>
+    <string name="switch_pushsetting_eventwinner">이벤트 당첨자</string>
+    <string name="switch_pushsetting_youtube">유튜브</string>
+
 </resources>
