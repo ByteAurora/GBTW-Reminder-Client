@@ -9,7 +9,6 @@ import android.widget.Switch;
 
 public class PushSettingActivity extends AppCompatActivity {
     private SwitchCompat switchPushSettingNotice;
-    private SwitchCompat switchPushSettingNoticeCoupon;
     private SwitchCompat switchPushSettingUpdate;
     private SwitchCompat switchPushSettingEvent;
     private SwitchCompat switchPushSettingEndEvent;
@@ -26,7 +25,6 @@ public class PushSettingActivity extends AppCompatActivity {
 
     private void init(){
         switchPushSettingNotice = findViewById(R.id.switch_pushsetting_notice);
-        switchPushSettingNoticeCoupon = findViewById(R.id.switch_pushsetting_noticecoupon);
         switchPushSettingUpdate = findViewById(R.id.switch_pushsetting_update);
         switchPushSettingEvent = findViewById(R.id.switch_pushsetting_event);
         switchPushSettingEndEvent = findViewById(R.id.switch_pushsetting_eventwinner);
@@ -35,7 +33,6 @@ public class PushSettingActivity extends AppCompatActivity {
 
         SharedPreferenceManager.open(PushSettingActivity.this, Constants.SP_NAME);
         switchPushSettingNotice.setChecked(SharedPreferenceManager.load(Constants.SP_KEY_PUSHSETTING_NOTICE, false));
-        switchPushSettingNoticeCoupon.setChecked(SharedPreferenceManager.load(Constants.SP_KEY_PUSHSETTING_NOTICECOUPON, false));
         switchPushSettingUpdate.setChecked(SharedPreferenceManager.load(Constants.SP_KEY_PUSHSETTING_UPDATE, false));
         switchPushSettingEvent.setChecked(SharedPreferenceManager.load(Constants.SP_KEY_PUSHSETTING_EVENT, false));
         switchPushSettingEndEvent.setChecked(SharedPreferenceManager.load(Constants.SP_KEY_PUSHSETTING_ENDEVENT, false));
@@ -52,17 +49,6 @@ public class PushSettingActivity extends AppCompatActivity {
                 GbtwFirebaseMessagingService.subscribeTopic(Constants.FIREBASE_TOPIC_NOTICE);
             }else{
                 GbtwFirebaseMessagingService.unSubscribeTopic(Constants.FIREBASE_TOPIC_NOTICE);
-            }
-        });
-        switchPushSettingNoticeCoupon.setOnCheckedChangeListener((compoundButton, b) -> {
-            SharedPreferenceManager.open(PushSettingActivity.this, Constants.SP_NAME);
-            SharedPreferenceManager.save(Constants.SP_KEY_PUSHSETTING_NOTICECOUPON, b);
-            SharedPreferenceManager.close();
-
-            if(b){
-                GbtwFirebaseMessagingService.subscribeTopic(Constants.FIREBASE_TOPIC_NOTICECOUPON);
-            }else{
-                GbtwFirebaseMessagingService.unSubscribeTopic(Constants.FIREBASE_TOPIC_NOTICECOUPON);
             }
         });
         switchPushSettingUpdate.setOnCheckedChangeListener((compoundButton, b) -> {

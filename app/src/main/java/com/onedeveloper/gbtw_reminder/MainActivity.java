@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
         if(SharedPreferenceManager.load(Constants.SP_KEY_INIT, false) == false){
             SharedPreferenceManager.save(Constants.SP_KEY_TRIAL, true);
             SharedPreferenceManager.save(Constants.SP_KEY_PUSHSETTING_NOTICE, true);
-            SharedPreferenceManager.save(Constants.SP_KEY_PUSHSETTING_NOTICECOUPON, true);
             SharedPreferenceManager.save(Constants.SP_KEY_PUSHSETTING_UPDATE, true);
             SharedPreferenceManager.save(Constants.SP_KEY_PUSHSETTING_EVENT, true);
             SharedPreferenceManager.save(Constants.SP_KEY_PUSHSETTING_ENDEVENT, true);
@@ -51,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
             SharedPreferenceManager.save(Constants.SP_KEY_PUSHSETTING_YOUTUBE, true);
 
             GbtwFirebaseMessagingService.subscribeTopic(Constants.FIREBASE_TOPIC_NOTICE);
-            GbtwFirebaseMessagingService.subscribeTopic(Constants.FIREBASE_TOPIC_NOTICECOUPON);
             GbtwFirebaseMessagingService.subscribeTopic(Constants.FIREBASE_TOPIC_UPDATE);
             GbtwFirebaseMessagingService.subscribeTopic(Constants.FIREBASE_TOPIC_EVENT);
             GbtwFirebaseMessagingService.subscribeTopic(Constants.FIREBASE_TOPIC_ENDEVENT);
