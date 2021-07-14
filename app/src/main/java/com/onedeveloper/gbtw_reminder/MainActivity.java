@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferenceManager.open(MainActivity.this, Constants.SP_NAME);
 
         if(SharedPreferenceManager.load(Constants.SP_KEY_INIT, false) == false){
+            SharedPreferenceManager.save(Constants.SP_KEY_TRIAL, true);
             SharedPreferenceManager.save(Constants.SP_KEY_PUSHSETTING_NOTICE, true);
             SharedPreferenceManager.save(Constants.SP_KEY_PUSHSETTING_NOTICECOUPON, true);
             SharedPreferenceManager.save(Constants.SP_KEY_PUSHSETTING_UPDATE, true);
