@@ -1,19 +1,20 @@
 package com.onedeveloper.gbtw_reminder;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 
 import android.os.Bundle;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
 public class PushSettingActivity extends AppCompatActivity {
-    private Switch switchPushSettingNotice;
-    private Switch switchPushSettingNoticeCoupon;
-    private Switch switchPushSettingUpdate;
-    private Switch switchPushSettingEvent;
-    private Switch switchPushSettingEndEvent;
-    private Switch switchPushSettingEventWinner;
-    private Switch switchPushSettingYoutube;
+    private SwitchCompat switchPushSettingNotice;
+    private SwitchCompat switchPushSettingNoticeCoupon;
+    private SwitchCompat switchPushSettingUpdate;
+    private SwitchCompat switchPushSettingEvent;
+    private SwitchCompat switchPushSettingEndEvent;
+    private SwitchCompat switchPushSettingEventWinner;
+    private SwitchCompat switchPushSettingYoutube;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
