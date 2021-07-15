@@ -12,6 +12,8 @@
         android:roundIcon="@mipmap/ic_gbtw_logo_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GBTWReminder">
+        <activity android:name=".LobbyActivity"></activity>
+
         <service
             android:name=".GbtwFirebaseMessagingService"
             android:exported="false">
@@ -19,7 +21,8 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <activity android:name=".PushSettingActivity"></activity>
+
+        <activity android:name=".PushSettingActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
