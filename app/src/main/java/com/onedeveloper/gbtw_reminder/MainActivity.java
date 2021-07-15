@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
         init();
 
-        Intent intent = new Intent(MainActivity.this, PushSettingActivity.class);
+        Intent intent = new Intent(MainActivity.this, LobbyActivity.class);
         startActivity(intent);
     }
 
