@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
@@ -21,48 +22,81 @@ import com.google.firebase.messaging.RemoteMessage;
 // Test device token: d1VRBeqsSJiyR6djvMqrNH:APA91bHojG43VZL3M9PTp6T_RLLWpcQocPBLB4_Rog_7cQuN1sF8-3t0jTTsD-qI16PSu5HbILXFBg6eY7TFP5dCpYdS4Y4tWehcRYgN2z29-5NU64KuiNqtt99gBGAeuTkVwaOfMJ62
 
 public class GbtwFirebaseMessagingService extends FirebaseMessagingService {
-    private final static String GBTW_NOTIFICATION_GROUP = "GBTW NOTIFICATION GROUP";
+    private final static String CHANNEL_ID = "GBTW";
+    private final static String CHANNEL_NAME = "GBTW";
+    private final static String GROUP_ID = "com.android.onedeveloper.gbtw";
 
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
+        SharedPreferenceManager.open(this, Constants.SP_NAME);
+
         if (remoteMessage.getData().size() > 0) {
-            Log.d("GBTW LOG", "Data: " + remoteMessage.getData());
+            Log.d("GBTWLOG", "Data: " + remoteMessage.getData().get("link"));
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(remoteMessage.getData().get("link")));
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 153, intent, PendingIntent.FLAG_ONE_SHOT);
+
+            NotificationCompat.Builder notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+                    .setSmallIcon(R.mipmap.ic_gbtw_logo)
+                    .setContentTitle(remoteMessage.getData().get("title"))
+                    .setContentText(remoteMessage.getData().get("body"))
+                    .setFullScreenIntent(pendingIntent, true)
+                    .setPriority(NotificationCompat.PRIORITY_MAX)
+                    .setAutoCancel(true)
+                    .setGroup(GROUP_ID);
+
+            NotificationCompat.Builder notificationGroup = new NotificationCompat.Builder(this, CHANNEL_ID)
+                    .setSmallIcon(R.mipmap.ic_gbtw_logo)
+                    .setPriority(NotificationCompat.PRIORITY_MAX)
+                    .setGroup(GROUP_ID)
+                    .setGroupSummary(true);
+
+            NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
+
+            int notificationNumber = SharedPreferenceManager.load(Constants.SP_KEY_LAST_NOTIFICATION_NUMBER, 0) + 1;
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+                notificationManagerCompat.createNotificationChannel(notificationChannel);
+            }
+
+            notificationManagerCompat.notify(notificationNumber, notification.build());
+            notificationManagerCompat.notify(0, notificationGroup.build());
+            SharedPreferenceManager.save(Constants.SP_KEY_LAST_NOTIFICATION_NUMBER, notificationNumber);
         } else if (remoteMessage.getNotification() != null) {
             String title = remoteMessage.getNotification().getTitle();
             String message = remoteMessage.getNotification().getBody();
-            Log.d("GBTW LOG", "Notification: {Title: " + title + ", Message: " + message + "}");
+            Log.d("GBTWLOG", "Notification: {Title: " + title + ", Message: " + message + "}");
 
             Intent intent = new Intent(this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 153, intent, PendingIntent.FLAG_ONE_SHOT);
-            String channelId = "GBTWLOG";
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
-            NotificationCompat.Builder notification = new NotificationCompat.Builder(this, channelId)
-                    .setGroup(GBTW_NOTIFICATION_GROUP)
-                    .setSmallIcon(R.mipmap.ic_launcher)
+            NotificationCompat.Builder notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+                    .setGroup(GROUP_ID)
+                    .setSmallIcon(R.mipmap.ic_gbtw_logo)
                     .setContentTitle(title)
                     .setContentText(message)
                     .setAutoCancel(true)
                     .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
                     .setContentIntent(pendingIntent);
 
-            NotificationCompat.Builder notificationGroup = new NotificationCompat.Builder(this, channelId)
+            NotificationCompat.Builder notificationGroup = new NotificationCompat.Builder(this, CHANNEL_ID)
                     .setContentTitle(title)
-                    .setSmallIcon(R.mipmap.ic_launcher)
-                    .setGroup(GBTW_NOTIFICATION_GROUP)
+                    .setSmallIcon(R.mipmap.ic_gbtw_logo)
+                    .setGroup(GROUP_ID)
                     .setGroupSummary(true)
                     .setContentIntent(pendingIntent);
 
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
 
             SharedPreferences sharedPreferences = getSharedPreferences("SP_GBTW", MODE_PRIVATE);
-            int notificationSequence = sharedPreferences.getInt("LAST_NOTIFICATION_SEQUENCE", 0) + 1;
+            int notificationSequence = sharedPreferences.getInt(Constants.SP_KEY_LAST_NOTIFICATION_NUMBER, 0) + 1;
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 String channelName = "GBTW";
-                NotificationChannel notificationChannel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT);
+                NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_HIGH);
                 notificationManager.createNotificationChannel(notificationChannel);
-                notification.setChannelId(channelId);
+                notification.setChannelId(CHANNEL_ID);
             }
 
             notificationManager.notify(notificationSequence, notification.build());
@@ -71,6 +105,8 @@ public class GbtwFirebaseMessagingService extends FirebaseMessagingService {
         } else {
             Log.d("GBTWLOG", "Notification: Receive data failed : " + remoteMessage.getData());
         }
+
+        SharedPreferenceManager.close();
     }
 
     @Override

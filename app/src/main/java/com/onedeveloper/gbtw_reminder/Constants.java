@@ -5,6 +5,7 @@ public class Constants {
     public static final String SP_NAME = "SP_GBTW";
     public static final String SP_KEY_INIT = "SP_KEY_INIT";
     public static final String SP_KEY_TRIAL = "SP_KEY_TRIAL";
+    public static final String SP_KEY_LAST_NOTIFICATION_NUMBER = "SP_KEY_LAST_NOTIFICATION_NUMBER";
     public static final String SP_KEY_PUSHSETTING_NOTICE = "SP_KEY_PUSHSETTING_NOTICE";
     public static final String SP_KEY_PUSHSETTING_UPDATE = "SP_KEY_PUSHSETTING_UPDATE";
     public static final String SP_KEY_PUSHSETTING_EVENT = "SP_KEY_PUSHSETTING_EVENT";
