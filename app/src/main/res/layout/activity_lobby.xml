@@ -57,7 +57,7 @@
                 android:id="@+id/btn_titlebar_pushsetting"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:padding="0"
+                android:padding="0dp"
                 android:scaleType="fitCenter"
                 app:srcCompat="@drawable/logo" />
         </LinearLayout>
